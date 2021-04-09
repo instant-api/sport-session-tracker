@@ -81,6 +81,7 @@
   },
   "publishConfig": {
     "access": "public",
+    "cache": "cache/.npm",
     "registry": "https://registry.npmjs.org"
   },
   "resolutions": {
