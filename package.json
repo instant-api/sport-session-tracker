@@ -1,6 +1,6 @@
 {
   "name": "@instant-api/sport-session-tracker",
-  "version": "0.0.0",
+  "version": "1.0.0-0",
   "description": "> A CLI to create a small Fridge manager API",
   "homepage": "https://github.com/instant-api/sport-session-tracker#readme",
   "bugs": {
