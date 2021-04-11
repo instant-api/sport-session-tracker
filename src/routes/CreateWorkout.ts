@@ -1,4 +1,4 @@
-import { IsAuthenticatedMiddleware, AuthConsumer } from '../Authentication';
+import { AuthConsumer } from '../Authentication';
 import { DatabaseConsumer, findPlaceBySlug, insertWorkout } from '../Database';
 import { compose, HttpError, JsonResponse, Middleware } from 'tumau';
 import { notNil, ZodDateISOStringPast } from '../Utils';
@@ -17,7 +17,7 @@ const Body = ZodBodyValidator(
 );
 
 export function CreateWorkoutRoute(): Middleware {
-  return compose(IsAuthenticatedMiddleware(), Body.validate, async (ctx) => {
+  return compose(Body.validate, async (ctx) => {
     const { place, date, distance, duration } = Body.getValue(ctx);
     const user = notNil(ctx.getOrFail(AuthConsumer));
     const db = ctx.getOrFail(DatabaseConsumer);

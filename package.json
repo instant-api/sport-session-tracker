@@ -1,7 +1,7 @@
 {
   "name": "@instant-api/sport-session-tracker",
   "version": "1.0.0-0",
-  "description": "> A CLI to create a small Fridge manager API",
+  "description": "> A CLI to create a Sport session tracker API",
   "homepage": "https://github.com/instant-api/sport-session-tracker#readme",
   "bugs": {
     "url": "https://github.com/instant-api/sport-session-tracker/issues"
@@ -45,6 +45,7 @@
   "dependencies": {
     "arg": "^5.0.0",
     "bcrypt": "^5.0.1",
+    "busboy": "^0.3.1",
     "cuid": "^2.1.8",
     "date-fns": "^2.19.0",
     "faker": "^5.5.2",
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/busboy": "^0.2.3",
     "@types/faker": "^5.5.0",
     "@types/fs-extra": "^9.0.8",
     "@types/inquirer": "^7.3.1",

@@ -15,4 +15,10 @@ export const ROUTES = {
   signup: Chemin.create('action', 'signup'),
   login: Chemin.create('action', 'login'),
   createWorkout: Chemin.create('action', 'create-workout'),
+  createPlace: Chemin.create('action', 'create-place'),
+  updatePlaceImage: Chemin.create(
+    'action',
+    'update-place-image',
+    CheminParam.string('slug')
+  ),
 };

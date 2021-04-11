@@ -153,7 +153,7 @@ export const findPlaceBySlug = createSafeQuery(
       name: z.string(),
       lng: z.number(),
       lat: z.number(),
-      image: z.string(),
+      image: z.string().nullable(),
     })
     .or(z.undefined())
 );
@@ -266,7 +266,6 @@ export const getWorkouts = createSafeQuery(
       })
       .strict()
   )
-  // logReturn
 );
 
 export const countWorkouts = createSafeQuery(
@@ -288,3 +287,61 @@ export const countWorkouts = createSafeQuery(
   },
   z.number()
 );
+
+type InsertPlaceParams = {
+  name: string;
+  slug: string;
+  lat: number;
+  lng: number;
+};
+
+export const insertPlace = createSafeQuery(
+  (db, params: InsertPlaceParams) => {
+    return db('places').insert(params);
+  },
+  z.any(),
+  (): void => {}
+);
+
+type GetPlacesOptions = {
+  offset?: number | null;
+  limit?: number | null;
+};
+
+export const getPlaces = createSafeQuery(
+  (db, params: GetPlacesOptions) => {
+    let query = db.select(
+      'places.slug',
+      'places.name',
+      'places.image',
+      db.raw(`count(??) as ??`, ['workouts.id', 'workoutCount'])
+    );
+    query = query.orderBy(`places.name`, 'asc');
+    const offset = params.offset ?? 0;
+    const limit = params.limit ?? 10;
+    query = query.offset(offset).limit(limit);
+    query.from('places');
+    query = query.leftJoin('workouts', 'workouts.place', 'places.slug');
+    query = query.groupBy('places.slug');
+    return query;
+  },
+  z.array(
+    z
+      .object({
+        slug: z.string(),
+        name: z.string(),
+        image: z.string().nullable(),
+        workoutCount: z.number(),
+      })
+      .strict()
+  )
+);
+
+export const countPlaces = createSafeQuery(async (db, _params: null) => {
+  let query = db('places');
+  const res = await query.count().first();
+  if (!res) {
+    return 0;
+  }
+  return res['count(*)'];
+}, z.number());

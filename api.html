@@ -5,32 +5,185 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instant Sport Session Tracker API</title>
     <style>
+      body {
+        font-size: 1rem;
+        line-height: 1.5;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      }
+
+      main {
+        width: calc(100% - 40px);
+        margin: 3rem auto;
+        max-width: 700px;
+      }
+
       code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
         background: #b3e5fc;
         border-radius: 4px;
         display: inline-block;
         padding: 0 5px;
-        font-size: 0.9em;
+        font-size: 1rem;
       }
 
-      pre {
-        line-height: 1.5;
+      h1 {
+        margin: 0;
+        font-size: 1.4rem;
+        margin-top: 0.4rem;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        margin-left: 1rem;
+      }
+
+      li {
+        margin: 0;
         font-size: 1rem;
+        margin-top: 0.4rem;
+        margin-left: 1rem;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        margin-top: 1.2rem;
       }
 
       h3 {
         margin: 0;
         font-size: 1rem;
+        margin-top: 1rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1rem;
+        margin-top: 0.4rem;
+        margin-left: 1rem;
       }
     </style>
   </head>
   <body>
-    <pre>
-<h3>Instant Sport Session Tracker API</h3>
-<b>GET <a href="/">/</a></b>
-- Return this page
+    <main>
+      <h1>Instant Sport Session Tracker API</h1>
+      <h3>GET <a href="/">/</a></h3>
+      <p>Return this page</p>
 
-<b>TODO</b>
-    </pre>
+      <h3>GET <a href="/public">/public/*</a></h3>
+      <p>Everything under the /public url is statically served.</p>
+
+      <h3>GET <a href="/workouts">/workouts</a></h3>
+      <p>
+        Return an object with a list of workout object and the total
+        <code>{ result: [], total: 123 }</code>
+      </p>
+      <p>Accept the following query parameters:</p>
+      <ul>
+        <li><code>offset</code>: Number of items to skip</li>
+        <li>
+          <code>limit</code>: Number of items to return (default
+          <code>10</code>)
+        </li>
+        <li><code>places</code>: A list a places slugs</li>
+        <li><code>users</code>: A list of user's username</li>
+        <li><code>order</code>: <code>'asc'</code> or <code>'desc'</code></li>
+        <li>
+          <code>sort</code>: One of <code>'date'</code> <code>'place'</code>
+          <code>'user'</code> <code>'distance'</code> <code>'duration'</code>
+          <code>'speed'</code>
+        </li>
+      </ul>
+
+      <h3>GET <a href="/places">/places</a></h3>
+      <p>
+        Return an object with a list of places object and the total
+        <code>{ result: [], total: 123 }</code>
+      </p>
+      <p>Accept the following query parameters:</p>
+      <ul>
+        <li><code>offset</code>: Number of items to skip</li>
+        <li>
+          <code>limit</code>: Number of items to return (default
+          <code>10</code>)
+        </li>
+      </ul>
+
+      <h3>GET <a href="/place/champ-de-mars-paris">/place/:slug</a></h3>
+      <p>Return a place object</p>
+
+      <h3>POST <a href="/action/signup">/action/signup</a></h3>
+      <p>Signup to create a new account</p>
+      <ul>
+        <li>
+          JSON Body
+          <code
+            >{ username, password, firstName, lastName, age, weight, height
+            }</code
+          >
+          (all properties are required)
+        </li>
+        <li>
+          Return an object with the token of the created user:
+          <code>{ token: "" }</code>
+        </li>
+      </ul>
+
+      <h3>POST <a href="/action/login">/action/login</a></h3>
+      <p>Login using <code>username</code> and <code>password</code></p>
+      <ul>
+        <li>
+          JSON Body <code>{ username: "", password: "" }</code> (all properties
+          are required)
+        </li>
+        <li>
+          Return an object with the token of the user:
+          <code>{ token: "" }</code>
+        </li>
+      </ul>
+
+      <h2>Authenticated routes</h2>
+      <p>
+        The following routes require a Require an
+        <code>Authenticated</code> header of <code>Bearer TOKEN</code>
+      </p>
+
+      <h3>GET <a href="/me">/me</a></h3>
+      <p>
+        Return the me object:
+        <code>{ username, token, firstName, lastName }</code>
+      </p>
+
+      <h3>POST <a href="/action/create-workout">/action/create-workout</a></h3>
+      <p>Create a new workout</p>
+      <ul>
+        <li>
+          JSON Body: <code>{ date, duration, distance, place }</code> (<code
+            >date</code
+          >
+          must be an ISO Date string)
+        </li>
+        <li>Return an object with <code>{ id }</code></li>
+      </ul>
+
+      <h3>POST <a href="/action/create-place">/action/create-place</a></h3>
+      <p>Create a new place</p>
+      <ul>
+        <li>JSON Body: <code>{ name, slug, lng, lat }</code></li>
+        <li>Return an object with <code>{ slug }</code></li>
+      </ul>
+
+      <h3>
+        POST
+        <a href="/action/update-place-image/:slug"
+          >/action/update-place-image/:slug</a
+        >
+      </h3>
+      <p>Update a new image for a place</p>
+      <ul>
+        <li>FormData Body: { image: FILE }</li>
+      </ul>
+    </main>
   </body>
 </html>

@@ -1,3 +1,4 @@
+import { Knex } from 'knex';
 import {
   createServer as createTumauServer,
   compose,
@@ -15,7 +16,7 @@ import {
   HttpErrorToTextResponse,
 } from 'tumau';
 import { DatabaseMiddleware } from './Database';
-import { AuthMiddleware } from './Authentication';
+import { AuthMiddleware, IsAuthenticatedMiddleware } from './Authentication';
 import { ROUTES } from './routes';
 import { routeGroup, waitRandom } from './Utils';
 import { HomeRoute } from './routes/Home';
@@ -28,7 +29,8 @@ import { PublicRoute } from './routes/Public';
 import { NotFoundRoute } from './routes/NotFound';
 import { PlacesRoute } from './routes/Places';
 import { PlaceRoute } from './routes/Place';
-import { Knex } from 'knex';
+import { CreatePlaceRoute } from './routes/CreatePlace';
+import { UpdatePlaceImageRoute } from './routes/UpdatePlaceImage';
 
 export type Options = {
   db: Knex;
@@ -85,14 +87,16 @@ export function createServer({
             JsonParser()
           ),
           [
-            routeGroup(null, [
+            Route.GET(ROUTES.workouts, WorkoutsRoute()),
+            Route.GET(ROUTES.places, PlacesRoute()),
+            Route.GET(ROUTES.place, PlaceRoute()),
+            Route.POST(ROUTES.signup, SignupRoute()),
+            Route.POST(ROUTES.login, LoginRoute()),
+            routeGroup(IsAuthenticatedMiddleware(), [
               Route.GET(ROUTES.me, MeRoute()),
-              Route.POST(ROUTES.signup, SignupRoute()),
-              Route.POST(ROUTES.login, LoginRoute()),
-              Route.GET(ROUTES.workouts, WorkoutsRoute()),
               Route.POST(ROUTES.createWorkout, CreateWorkoutRoute()),
-              Route.GET(ROUTES.places, PlacesRoute()),
-              Route.GET(ROUTES.place, PlaceRoute()),
+              Route.POST(ROUTES.createPlace, CreatePlaceRoute()),
+              Route.POST(ROUTES.updatePlaceImage, UpdatePlaceImageRoute()),
             ]),
             Route.fallback(NotFoundRoute()),
           ]

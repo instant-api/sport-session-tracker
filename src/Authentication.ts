@@ -4,6 +4,8 @@ import { findUserByToken, DatabaseConsumer } from './Database';
 export type User = {
   username: string;
   token: string;
+  firstName: string;
+  lastName: string;
 };
 
 const AuthContext = createContext<User | null>({
