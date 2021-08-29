@@ -1,7 +1,6 @@
 import * as z from 'zod';
 import { parseISO, isValid, isPast } from 'date-fns';
-import { Route } from '@tumau/router';
-import { Middleware, Routes } from 'tumau';
+import { Middleware, Routes, Route } from 'tumau';
 
 export function routeGroup(
   middleware: Middleware | Array<Middleware> | null,
