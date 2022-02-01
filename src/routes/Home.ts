@@ -1,4 +1,4 @@
-import { Middleware } from '@tumau/core';
+import { Middleware } from 'tumau';
 import fse from 'fs-extra';
 import { TumauResponse } from 'tumau';
 

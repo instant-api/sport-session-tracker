@@ -1,9 +1,9 @@
-import { createContext, Middleware } from 'tumau';
+import { createKey, Middleware } from 'tumau';
 import { knex, Knex } from 'knex';
 import { generateInitialData } from './Scafolder';
 import * as z from 'zod';
 
-const DatabaseContext = createContext<Knex>({ name: 'Database' });
+const DatabaseContext = createKey<Knex>({ name: 'Database' });
 
 export const DatabaseConsumer = DatabaseContext.Consumer;
 
@@ -15,7 +15,7 @@ export function DatabaseMiddleware(db: Knex): Middleware {
 
 export function connect(dbFile: string) {
   return knex({
-    client: 'sqlite3',
+    client: 'better-sqlite3',
     connection: {
       filename: dbFile,
     },

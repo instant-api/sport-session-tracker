@@ -1,6 +1,6 @@
 import { slug as createSlug } from 'cuid';
 import { Place, User, Workout } from './Database';
-import faker from 'faker/locale/fr';
+import faker from '@faker-js/faker/locale/fr';
 import random from 'random';
 import { hash } from 'bcrypt';
 import { uid } from 'uid/secure';

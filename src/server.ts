@@ -2,8 +2,9 @@ import { Knex } from 'knex';
 import {
   createServer as createTumauServer,
   compose,
-  RouterPackage,
+  Router,
   Route,
+  UrlParser,
   InvalidResponseToHttpError,
   TumauServer,
   ErrorToHttpError,
@@ -14,11 +15,12 @@ import {
   CorsActual,
   StringBodyParser,
   HttpErrorToTextResponse,
+  HttpError,
 } from 'tumau';
 import { DatabaseMiddleware } from './Database';
 import { AuthMiddleware, IsAuthenticatedMiddleware } from './Authentication';
 import { ROUTES } from './routes';
-import { routeGroup, waitRandom } from './Utils';
+import { waitRandom } from './Utils';
 import { HomeRoute } from './routes/Home';
 import { MeRoute } from './routes/Me';
 import { SignupRoute } from './routes/Signup';
@@ -58,7 +60,11 @@ export function createServer({
       const res = await next(ctx);
       return res;
     } catch (error) {
-      console.error(error);
+      if (error instanceof HttpError.NotFound) {
+        // dont log 404
+      } else {
+        console.error(error);
+      }
       throw error;
     }
   };
@@ -68,19 +74,20 @@ export function createServer({
       CorsPreflight(),
       CorsActual(),
       HttpErrorToTextResponse,
-      ErrorToHttpError,
+      ErrorToHttpError({ logOnError: false }),
       LogErrors,
+      UrlParser(),
       InvalidResponseToHttpError,
       DatabaseMiddleware(db),
       WaitMiddleware,
       AuthMiddleware(),
-      RouterPackage([
+      Router([
         Route.GET(ROUTES.public, PublicRoute(publicPath)),
         Route.GET(ROUTES.home, HomeRoute(apiDocPath)),
-        routeGroup(
+        ...Route.group(
           compose(
             HttpErrorToJsonResponse,
-            ErrorToHttpError,
+            ErrorToHttpError({ logOnError: false }),
             LogErrors,
             InvalidResponseToHttpError,
             StringBodyParser(),
@@ -92,7 +99,7 @@ export function createServer({
             Route.GET(ROUTES.place, PlaceRoute()),
             Route.POST(ROUTES.signup, SignupRoute()),
             Route.POST(ROUTES.login, LoginRoute()),
-            routeGroup(IsAuthenticatedMiddleware(), [
+            ...Route.group(IsAuthenticatedMiddleware(), [
               Route.GET(ROUTES.me, MeRoute()),
               Route.POST(ROUTES.createWorkout, CreateWorkoutRoute()),
               Route.POST(ROUTES.createPlace, CreatePlaceRoute()),

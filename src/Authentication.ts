@@ -1,4 +1,4 @@
-import { createContext, HttpError, Middleware, RequestConsumer } from 'tumau';
+import { createKey, HttpError, Middleware, RequestConsumer } from 'tumau';
 import { findUserByToken, DatabaseConsumer } from './Database';
 
 export type User = {
@@ -8,7 +8,7 @@ export type User = {
   lastName: string;
 };
 
-const AuthContext = createContext<User | null>({
+const AuthContext = createKey<User | null>({
   name: 'Auth',
   defaultValue: null,
 });

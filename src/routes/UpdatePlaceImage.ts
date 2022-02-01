@@ -7,7 +7,7 @@ import {
   TumauResponse,
 } from 'tumau';
 import { ROUTES } from '../routes';
-import Busboy from 'busboy';
+import busboy from 'busboy';
 
 const NOT_IMPLEMENTED = true;
 
@@ -25,28 +25,26 @@ export function UpdatePlaceImageRoute(): Middleware {
       console.log({ slug });
 
       const request = ctx.get(RequestConsumer);
-      const busboy = new Busboy({ headers: request.headers });
+      const bb = busboy({ headers: request.headers });
 
-      busboy.on(
-        'file',
-        function (fieldname, file, _filename, _encoding, _mimetype) {
-          if (fieldname !== 'image') {
-            file.resume();
-          }
-          // console.log({
-          //   fieldname,
-          //   file,
-          //   filename,
-          //   encoding,
-          //   mimetype,
-          // });
+      bb.on('file', (fieldname, file, _info) => {
+        // const { filename, encoding, mimeType } = info;
+        if (fieldname !== 'image') {
           file.resume();
         }
-      );
-      busboy.on('finish', function () {
+        // console.log({
+        //   fieldname,
+        //   file,
+        //   filename,
+        //   encoding,
+        //   mimetype,
+        // });
+        file.resume();
+      });
+      bb.on('finish', function () {
         resolve(TumauResponse.noContent());
       });
-      request.req.pipe(busboy);
+      request.req.pipe(bb);
     });
   });
 }

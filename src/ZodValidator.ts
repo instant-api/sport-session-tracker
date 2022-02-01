@@ -1,15 +1,15 @@
 import * as z from 'zod';
 import {
   Middleware,
-  createContext,
+  createKey,
   JsonParserConsumer,
   UrlParserConsumer,
   HttpError,
-  ContextStack,
+  Stack,
 } from 'tumau';
 
 export function ZodBodyValidator<T>(schema: z.Schema<T>) {
-  const Ctx = createContext<T>({ name: 'ZodBody' });
+  const Ctx = createKey<T>({ name: 'ZodBody' });
 
   const validate: Middleware = async (ctx, next) => {
     const jsonBody = ctx.getOrFail(JsonParserConsumer);
@@ -25,7 +25,7 @@ export function ZodBodyValidator<T>(schema: z.Schema<T>) {
 
   return {
     validate,
-    getValue: (ctx: ContextStack) => ctx.getOrFail(Ctx.Consumer),
+    getValue: (ctx: Stack) => ctx.getOrFail(Ctx.Consumer),
   };
 }
 
@@ -35,7 +35,7 @@ export function ZodParamsValidator<T>(
   validators: { [K in keyof T]: Validator<any> },
   schema: z.Schema<T>
 ) {
-  const Ctx = createContext<T>({ name: 'ZodParams' });
+  const Ctx = createKey<T>({ name: 'ZodParams' });
 
   const validate: Middleware = async (ctx, next) => {
     const url = ctx.getOrFail(UrlParserConsumer);
@@ -65,7 +65,7 @@ export function ZodParamsValidator<T>(
 
   return {
     validate,
-    getValue: (ctx: ContextStack) => ctx.getOrFail(Ctx.Consumer),
+    getValue: (ctx: Stack) => ctx.getOrFail(Ctx.Consumer),
   };
 }
 

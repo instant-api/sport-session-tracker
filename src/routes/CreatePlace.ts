@@ -17,8 +17,6 @@ export function CreatePlaceRoute(): Middleware {
     const { name, slug, lat, lng } = Body.getValue(ctx);
     const db = ctx.getOrFail(DatabaseConsumer);
     const placeExist = await findPlaceBySlug(db, slug);
-    console.log(placeExist);
-
     if (placeExist) {
       throw new HttpError.BadRequest(`Place slug already exist`);
     }

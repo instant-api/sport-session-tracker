@@ -1,13 +1,5 @@
 import * as z from 'zod';
 import { parseISO, isValid, isPast } from 'date-fns';
-import { Middleware, Routes, Route } from 'tumau';
-
-export function routeGroup(
-  middleware: Middleware | Array<Middleware> | null,
-  children?: Routes
-): Route {
-  return Route.create({ exact: false }, middleware, children);
-}
 
 export function notNil<T>(val: T | null | undefined): T {
   if (val === null || val === undefined) {
