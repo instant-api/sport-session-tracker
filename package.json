@@ -29,10 +29,11 @@
     "build": "tsdx build",
     "lint": "tsdx lint",
     "pub": "tsdx build && np",
+    "release": "yarn build && np",
     "run": "npx -p . sport-session-tracker --folder run-example",
     "run:slow": "npx -p . sport-session-tracker --folder run-example --slow",
-    "start": "tsdx watch",
     "script:fetch-places": "esr ./scripts/fetch-places.ts",
+    "start": "tsdx watch",
     "test": "tsdx test --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch"
@@ -42,6 +43,9 @@
     "semi": true,
     "singleQuote": true,
     "trailingComma": "es5"
+  },
+  "resolutions": {
+    "**/typescript": "^4.2.3"
   },
   "dependencies": {
     "@faker-js/faker": "^6.0.0-alpha.5",
@@ -85,8 +89,5 @@
     "access": "public",
     "cache": "cache/.npm",
     "registry": "https://registry.npmjs.org"
-  },
-  "resolutions": {
-    "**/typescript": "^4.2.3"
   }
 }
