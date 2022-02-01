@@ -1,6 +1,6 @@
 {
   "name": "@instant-api/sport-session-tracker",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "> A CLI to create a Sport session tracker API",
   "homepage": "https://github.com/instant-api/sport-session-tracker#readme",
   "bugs": {
